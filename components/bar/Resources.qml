@@ -7,7 +7,7 @@ Rectangle {
     id: resources
 
     Layout.fillHeight: true
-    Layout.preferredWidth: 100
+    Layout.preferredWidth: 50
     color: "transparent"
 
     property int valueSize: 8

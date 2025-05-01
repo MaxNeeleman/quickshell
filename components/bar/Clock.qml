@@ -4,7 +4,7 @@ import "../../utils"
 
 Rectangle {
     Layout.fillHeight: true
-    Layout.preferredWidth: 100
+    Layout.preferredWidth: 150
     color: "transparent"
 
     Text {
@@ -12,6 +12,6 @@ Rectangle {
         text: Time.time
         color: Colors.fg
         anchors.centerIn: parent
-        font.pixelSize: parent.height * 0.4
+        font.pixelSize: parent.height * 0.5
     }
 }

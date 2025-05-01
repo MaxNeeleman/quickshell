@@ -1,5 +1,7 @@
+//@ pragma UseQApplication
+
 import "./windows"
-import Quickshell // for ShellRoot and PanelWindow
+import Quickshell
 
 ShellRoot {
     Bar {}

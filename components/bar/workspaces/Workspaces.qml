@@ -11,7 +11,7 @@ Rectangle {
     color: 'transparent'
 
     Layout.fillHeight: true
-    Layout.preferredWidth: 200
+    Layout.preferredWidth: 100
 
     RowLayout {
         id: workspacesRow
@@ -48,9 +48,9 @@ Rectangle {
                 }
 
                 color: {
-                    if (nonexistent || !Hyprland.monitors.values || !Hyprland.workspaces.values) {
-                        return Colors.bgBlur;
-                    }
+                    //if (nonexistent || !Hyprland.monitors.values || !Hyprland.workspaces.values) {
+                    //    return Colors.bgBlur;
+                    //}
                     const workspace = Hyprland.workspaces.values.find(e => e.id === index + 1);
                     if (!workspace || !workspace.monitor) {
                         return Colors.bgBlur;

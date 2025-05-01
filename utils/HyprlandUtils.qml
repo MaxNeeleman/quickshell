@@ -8,7 +8,6 @@ Singleton {
     id: hyprland
 
     property list<HyprlandWorkspace> workspaces: sortWorkspaces(Hyprland.workspaces.values)
-    property HyprlandWorkspace focusedWorkspace: Hyprland.focusedMonitor?.activeWorkspace
     property int maxWorkspace: findMaxId()
 
     function sortWorkspaces(ws) {
@@ -16,7 +15,6 @@ Singleton {
     }
 
     function switchWorkspace(w: int): void {
-        console.log(`workspace: focus ${focusedWorkspace.id} -> ${w}`);
         Hyprland.dispatch(`workspace ${w}`);
     }
 
@@ -28,29 +26,9 @@ Singleton {
     Connections {
         target: Hyprland
         function onRawEvent(event) {
-            // console.log("EVENT NAME", event.name);
-            // consow.wg("EVENT DATA", event.data);
             let eventName = event.name;
 
             switch (eventName) {
-            // Both of these are required in order to detect workspace changes
-            // even when switching monitors.
-            // case "workspacev2":
-            //     {
-            //         // hyprland.focusedWorkspace = Hyprland.focusedMonitor?.activeWorkspace;
-            //         console.log(`workspace: ${hyprland.focusedWorkspace.id}`);
-            //         console.log(`num workspaces ${hyprland.workspaces.length}`)
-            //         console.log(`num workspaces (real) ${Hyprland.workspaces.values.length}`)
-            //         break;
-            //     }
-            // case "focusedmonv2":
-            //     {
-            //         // hyprland.focusedWorkspace = Hyprland.focusedMonitor?.activeWorkspace;
-            //         console.log(`workspace: ${hyprland.focusedWorkspace.id}`);
-            //         console.log(`num workspaces ${hyprland.workspaces.length}`)
-            //         console.log(`num workspaces (real) ${Hyprland.workspaces.values.length}`)
-            //         break;
-            //     }
             case "createworkspacev2":
                 {
                     hyprland.workspaces = hyprland.sortWorkspaces(Hyprland.workspaces.values);

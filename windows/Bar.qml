@@ -54,7 +54,7 @@ Scope {
                 anchors.rightMargin: 10
                 spacing: 10
 
-                Mpris {}
+                
             }
 
             // right

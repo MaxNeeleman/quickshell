@@ -6,9 +6,9 @@ Rectangle {
 
     property bool hovered: false
 
-    Layout.preferredWidth: 20
-    Layout.preferredHeight: 20
-    Layout.minimumWidth: 10
+    Layout.preferredWidth: 5
+    Layout.preferredHeight: 10
+    Layout.minimumWidth: 5
     Layout.minimumHeight: 10
     Layout.alignment: Qt.AlignHCenter
     radius: height / 2
