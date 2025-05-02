@@ -1,7 +1,6 @@
 //@ pragma UseQApplication
-
-import "./windows"
 import Quickshell
+import "bar"
 
 ShellRoot {
     Bar {}
