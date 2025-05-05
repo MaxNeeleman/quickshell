@@ -5,7 +5,7 @@ import Quickshell.Hyprland
 import Quickshell.Widgets
 import Qt5Compat.GraphicalEffects
 import "../utils" as Utils
-import "../Theme.qml" as Theme
+import "root:/"
 
 RowLayout {
     spacing: 5
@@ -30,14 +30,20 @@ RowLayout {
 
                 Layout.preferredWidth: {
                     if (focused) {
-                        return 30;
+                        return 25;
                     } else {
                         return 20;
                     }
                 }
-                Layout.preferredHeight: 20
+                Layout.preferredHeight: {
+                    if (focused) {
+                        return 25;
+                    } else {
+                        return 20;
+                    }
+                }
 
-                radius: 6
+                radius: 2
                 opacity: mouseArea.containsMouse ? 0.9 : 1.0
 
                 MouseArea {
@@ -51,29 +57,19 @@ RowLayout {
 
                 Rectangle {
                     anchors.fill: parent
-                    color: "transparent"
+                    color: mouseArea.containsMouse ? "grey" : Theme.get.buttonBackgroundColor
                     radius: parent.radius
-                    border.width: focused ? 2 : 0
-                    border.color: "black"
+                    border.width: focused ? 3 : 2
+                    border.color: Theme.get.buttonBorderColor
                 }
 
-                // Workspace number
                 Text {
                     id: workspaceText
                     anchors.centerIn: parent
                     text: (index + 1).toString()
-                    color: "black"
-                    font.pixelSize: 12
+                    color: "white"
+                    font.pixelSize: 15
                     font.bold: focused
-                }
-                
-                // Hover effect
-                Rectangle {
-                    anchors.fill: parent
-                    color: "grey"
-                    radius: parent.radius
-                    opacity: mouseArea.containsMouse ? 0.2 : 0
-                    Behavior on opacity { NumberAnimation { duration: 150 } }
                 }
             }
         }

@@ -106,6 +106,7 @@ Singleton {
     // Nord color palette
     property string barBgColor: "#2E3440"  // Nord0 - Polar Night
     property string buttonBorderColor: "#4C566A"  // Nord3 - Polar Night
+    property string buttonBackgroundColor: "#3D4550"
     property bool buttonBorderShadow: true
     property bool onTop: true
     property string iconColor: "#88C0D0"  // Nord7 - Frost
