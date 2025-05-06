@@ -4,7 +4,7 @@ import QtQuick
 import Quickshell
 
 Singleton {
-  property Item get: nordic
+  property Item get: catppuccin
   
   Item {
     id: windowsXP
@@ -12,6 +12,7 @@ Singleton {
     property string barBgColor: "#235EDC"
     property string buttonBorderColor: "#99000000"
     property bool buttonBorderShadow: false
+    property string buttonBackgroundColor: "#1111CC"
     property bool onTop: false
     property string iconColor: "green"
     property string iconPressedColor: "green"
@@ -36,7 +37,8 @@ Singleton {
     id: black
 
     property string barBgColor: "#cc000000" 
-    property string buttonBorderColor: "#44FFFFFF"
+    property string buttonBorderColor: "#BBBBBB"
+    property string buttonBackgroundColor: "#222222"
     property bool buttonBorderShadow: true
     property bool onTop: true
     property string iconColor: "blue"
@@ -64,25 +66,11 @@ Singleton {
   }
 
   Item {
-    id: black_bright
-
-    property string barBgColor: black.barBgColor
-    property string buttonBorderColor: windowsXP.buttonBorderColor
-    property bool buttonBorderShadow: windowsXP.buttonBorderShadow
-    property bool onTop: black.onTop
-    property string iconColor: "orange"
-    property string iconPressedColor: "orange"
-    property Gradient barGradient: black.barGradient
-    property Gradient buttonInactiveGradientV: windowsXP.buttonInactiveGradientV
-    property Gradient buttonInactiveGradientH: windowsXP.buttonInactiveGradientH
-    property Gradient buttonActiveGradient: windowsXP.buttonActiveGradient
-  }
-
-  Item {
     id: black_flat
 
     property string barBgColor: "#cc000000" 
-    property string buttonBorderColor: "#01000000" // Making this transparent breaks things
+    property string buttonBorderColor: "#BBBBBB"
+    property string buttonBackgroundColor: "#222222"
     property bool buttonBorderShadow: false
     property bool onTop: true
     property string iconColor: ""
@@ -132,5 +120,105 @@ Singleton {
       GradientStop { position: 1.0; color: "#88C0D0" }  // Nord7 - Frost
     }
   }
+
+  Item {
+    id: cyberpunk
+
+    // Tokyo Neon color palette
+    property string barBgColor: "#1A0B2E"  // Deep purple-black
+    property string buttonBorderColor: "#FF2A6D"  // Neon pink
+    property string buttonBackgroundColor: "#1A1A2E"  // Dark blue-black
+    property bool buttonBorderShadow: true
+    property bool onTop: true
+    property string iconColor: "#05D9E8"  // Electric blue
+    property string iconPressedColor: "#FF2A6D"  // Neon pink
+    property Gradient barGradient: Gradient {
+      GradientStop { position: 0.0; color: "#FF2A6D" }  // Neon pink
+      GradientStop { position: 0.4; color: "#1A0B2E" }  // Deep purple-black
+      GradientStop { position: 0.8; color: "#1A0B2E" }  // Deep purple-black
+      GradientStop { position: 1.0; color: "#1A0B2E" }  // Electric blue
+    }
+    property Gradient buttonInactiveGradientV: Gradient {
+      GradientStop { position: 0.0; color: "#05D9E8" }  // Electric blue
+      GradientStop { position: 0.3; color: "#1A0B2E" }  // Deep purple-black
+    }
+    property Gradient buttonInactiveGradientH: Gradient {
+      orientation: Gradient.Horizontal
+      GradientStop { position: 0.0; color: "#05D9E8" }  // Electric blue
+      GradientStop { position: 0.1; color: "#1A0B2E" }  // Deep purple-black
+    }
+    property Gradient buttonActiveGradient: Gradient {
+      GradientStop { position: 0.92; color: "#FF2A6D" }  // Neon pink
+      GradientStop { position: 0.93; color: "#D1F7FF" }  // Bright cyan
+      GradientStop { position: 1.0; color: "#D1F7FF" }  // Bright cyan
+    }
+  }
+
+  Item {
+    id: material
+
+    // Material Design 3 color palette
+    property string barBgColor: "#1F1F1F"  // Surface dark
+    property string buttonBorderColor: "#2D2D2D"  // Surface variant
+    property string buttonBackgroundColor: "#2D2D2D"  // Surface variant
+    property bool buttonBorderShadow: true
+    property bool onTop: true
+    property string iconColor: "#90CAF9"  // Primary light
+    property string iconPressedColor: "#64B5F6"  // Primary medium
+    property Gradient barGradient: Gradient {
+      GradientStop { position: 0.0; color: "#2D2D2D" }  // Surface variant
+      GradientStop { position: 0.4; color: "#1F1F1F" }  // Surface dark
+      GradientStop { position: 0.8; color: "#1F1F1F" }  // Surface dark
+      GradientStop { position: 1.0; color: "#121212" }  // Background
+    }
+    property Gradient buttonInactiveGradientV: Gradient {
+      GradientStop { position: 0.0; color: "#424242" }  // Surface light
+      GradientStop { position: 0.3; color: "#2D2D2D" }  // Surface variant
+    }
+    property Gradient buttonInactiveGradientH: Gradient {
+      orientation: Gradient.Horizontal
+      GradientStop { position: 0.0; color: "#424242" }  // Surface light
+      GradientStop { position: 0.1; color: "#2D2D2D" }  // Surface variant
+    }
+    property Gradient buttonActiveGradient: Gradient {
+      GradientStop { position: 0.92; color: "#90CAF9" }  // Primary light
+      GradientStop { position: 0.93; color: "#E3F2FD" }  // Primary lightest
+      GradientStop { position: 1.0; color: "#E3F2FD" }  // Primary lightest
+    }
+  }
+
+  Item {
+    id: catppuccin
+
+    // Catppuccin Mocha color palette
+    property string barBgColor: "#1E1E2E"  // Base
+    property string buttonBorderColor: "#313244"  // Surface0
+    property string buttonBackgroundColor: "#313244"  // Surface0
+    property bool buttonBorderShadow: true
+    property bool onTop: true
+    property string iconColor: "#89B4FA"  // Blue
+    property string iconPressedColor: "#74C7EC"  // Sapphire
+    property Gradient barGradient: Gradient {
+      GradientStop { position: 0.0; color: "#313244" }  // Surface0
+      GradientStop { position: 0.4; color: "#1E1E2E" }  // Base
+      GradientStop { position: 0.8; color: "#1E1E2E" }  // Base
+      GradientStop { position: 1.0; color: "#181825" }  // Crust
+    }
+    property Gradient buttonInactiveGradientV: Gradient {
+      GradientStop { position: 0.0; color: "#45475A" }  // Surface1
+      GradientStop { position: 0.3; color: "#313244" }  // Surface0
+    }
+    property Gradient buttonInactiveGradientH: Gradient {
+      orientation: Gradient.Horizontal
+      GradientStop { position: 0.0; color: "#45475A" }  // Surface1
+      GradientStop { position: 0.1; color: "#313244" }  // Surface0
+    }
+    property Gradient buttonActiveGradient: Gradient {
+      GradientStop { position: 0.92; color: "#89B4FA" }  // Blue
+      GradientStop { position: 0.93; color: "#CDD6F4" }  // Text
+      GradientStop { position: 1.0; color: "#CDD6F4" }  // Text
+    }
+  }
+
 }
 
