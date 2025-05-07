@@ -22,11 +22,12 @@ BarBlock {
 
     function updateVolume() {
         if (sink?.audio) {
-            content.symbolText = `󰕾 ${Math.round(sink.audio.volume * 100)}%`
+            const icon = sink.audio.muted ? "󰖁" : "󰕾"
+            content.symbolText = `${icon} ${Math.round(sink.audio.volume * 100)}%`
         }
     }
 
-    content: BarText { symbolText: `󰕾 ${Math.round(sink?.audio?.volume * 100)}%` }
+    content: BarText { symbolText: `${sink?.audio?.muted ? "󰖁" : "󰕾"} ${Math.round(sink?.audio?.volume * 100)}%` }
 
     MouseArea {
         anchors.fill: parent
