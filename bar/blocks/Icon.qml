@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls
 import Quickshell
 import Quickshell.Io
 import Quickshell.Widgets
@@ -21,16 +22,129 @@ BarBlock {
   color: "transparent"
 
   Process {
-    id: neofetch
+    id: appListProc
+    command: ["sh", "-c", "ls /usr/share/applications/*.desktop"]
     running: false
-    command: [ "sh", "-c", "wofi --drun show -x 0 -y 0" ]
     stdout: SplitParser {
-      onRead: data => console.log(`line read: ${data}`)
+      onRead: data => {
+        const appName = data.split("/").pop().replace(".desktop", "")
+        appListModel.append({ name: appName, path: data })
+      }
     }
   }
 
+  Process {
+    id: appLauncher
+    running: false
+    command: ["gtk-launch"]
+  }
+
+  ListModel {
+    id: appListModel
+  }
+
+  PopupWindow {
+    id: menuWindow
+    width: 300
+    height: 400
+    visible: false
+
+    anchor {
+      window: root.QsWindow?.window
+      edges: Edges.Bottom
+      gravity: Edges.Top
+    }
+
+    MouseArea {
+      anchors.fill: parent
+      hoverEnabled: true
+      onExited: {
+        if (!containsMouse) {
+          closeTimer.start()
+        }
+      }
+      onEntered: closeTimer.stop()
+
+      Timer {
+        id: closeTimer
+        interval: 500
+        onTriggered: menuWindow.visible = false
+      }
+
+      Rectangle {
+        anchors.fill: parent
+        color: "#2E3440"  // Using Nord theme color
+        border.color: "#4C566A"
+        border.width: 1
+        radius: 4
+
+        ColumnLayout {
+          anchors.fill: parent
+          anchors.margins: 10
+          spacing: 5
+
+          TextField {
+            id: searchField
+            Layout.fillWidth: true
+            placeholderText: "Search applications..."
+            color: "white"
+            background: Rectangle {
+              color: "#3B4252"
+              radius: 4
+            }
+            onTextChanged: filterApps()
+          }
+
+          ListView {
+            id: appListView
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            clip: true
+            model: appListModel
+            delegate: Rectangle {
+              width: parent.width
+              height: 35
+              color: mouseArea.containsMouse ? "#4C566A" : "transparent"
+              radius: 4
+
+              Text {
+                anchors.fill: parent
+                anchors.leftMargin: 10
+                text: model.name
+                color: "white"
+                font.pixelSize: 12
+                verticalAlignment: Text.AlignVCenter
+              }
+
+              MouseArea {
+                id: mouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+                onClicked: {
+                  appLauncher.command = ["gtk-launch", model.name]
+                  appLauncher.running = true
+                  menuWindow.visible = false
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  function filterApps() {
+    const searchText = searchField.text.toLowerCase()
+    for (let i = 0; i < appListModel.count; i++) {
+      const item = appListModel.get(i)
+      item.visible = item.name.toLowerCase().includes(searchText)
+    }
+  }
   onClicked: function() {
-    neofetch.running = !neofetch.running
+    if (!menuWindow.visible) {
+      appListModel.clear()
+      appListProc.running = true
+    }
+    menuWindow.visible = !menuWindow.visible
   }
 }
-
