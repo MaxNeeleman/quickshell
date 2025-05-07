@@ -15,7 +15,7 @@ BarBlock {
     id: batteryCheck
     command: ["sh", "-c", "test -d /sys/class/power_supply/BAT*"]
     running: true
-    onExited: hasBattery = exitCode === 0
+    onExited: function(exitCode) { hasBattery = exitCode === 0 }
   }
 
   Process {

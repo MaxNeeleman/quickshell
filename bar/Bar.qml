@@ -7,6 +7,19 @@ import "blocks" as Blocks
 import "root:/"
 
 Scope {
+  IpcHandler {
+    target: "bar"
+
+    function toggleVis(): void {
+      // Toggle visibility of all bar instances
+      for (let i = 0; i < Quickshell.screens.length; i++) {
+        barInstances[i].visible = !barInstances[i].visible;
+      }
+    }
+  }
+
+  property var barInstances: []
+
   Variants {
     model: Quickshell.screens
   
@@ -14,6 +27,10 @@ Scope {
       id: bar
       property var modelData
       screen: modelData
+
+      Component.onCompleted: {
+        barInstances.push(bar);
+      }
 
       color: Theme.get.barBgColor
 
@@ -27,14 +44,6 @@ Scope {
 
       visible: true
 
-      IpcHandler {
-        target: "bar"
-
-        function toggleVis(): void {
-          visible = !visible;
-        }
-      }
-    
       anchors {
         top: Theme.get.onTop
         bottom: !Theme.get.onTop
