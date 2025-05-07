@@ -23,12 +23,14 @@ BarBlock {
 
   Process {
     id: appListProc
-    command: ["sh", "-c", "ls /usr/share/applications/*.desktop"]
+    command: ["sh", "-c", "for f in /usr/share/applications/*.desktop; do if ! grep -qi 'terminal=true' \"$f\"; then name=$(grep -i '^Name=' \"$f\" | head -n1 | cut -d= -f2); basename=$(basename \"$f\" .desktop); echo \"$name|$basename|$f\"; fi; done"]
     running: false
     stdout: SplitParser {
       onRead: data => {
-        const appName = data.split("/").pop().replace(".desktop", "")
-        appListModel.append({ name: appName, path: data })
+        const [appName, launchName, desktopFile] = data.trim().split("|")
+        if (appName && launchName && desktopFile) {
+          appListModel.append({ name: appName, launchName: launchName, path: desktopFile })
+        }
       }
     }
   }
@@ -49,81 +51,105 @@ BarBlock {
     height: 400
     visible: false
 
+    onVisibleChanged: {
+      if (visible) {
+        searchField.forceActiveFocus()
+      }
+    }
+
     anchor {
       window: root.QsWindow?.window
       edges: Edges.Bottom
       gravity: Edges.Top
     }
 
-    MouseArea {
+    FocusScope {
       anchors.fill: parent
-      hoverEnabled: true
-      onExited: {
-        if (!containsMouse) {
-          closeTimer.start()
-        }
-      }
-      onEntered: closeTimer.stop()
+      focus: true
 
-      Timer {
-        id: closeTimer
-        interval: 500
-        onTriggered: menuWindow.visible = false
-      }
-
-      Rectangle {
+      MouseArea {
         anchors.fill: parent
-        color: "#2E3440"  // Using Nord theme color
-        border.color: "#4C566A"
-        border.width: 1
-        radius: 4
-
-        ColumnLayout {
-          anchors.fill: parent
-          anchors.margins: 10
-          spacing: 5
-
-          TextField {
-            id: searchField
-            Layout.fillWidth: true
-            placeholderText: "Search applications..."
-            color: "white"
-            background: Rectangle {
-              color: "#3B4252"
-              radius: 4
-            }
-            onTextChanged: filterApps()
+        hoverEnabled: true
+        onExited: {
+          if (!containsMouse) {
+            closeTimer.start()
           }
+        }
+        onEntered: closeTimer.stop()
 
-          ListView {
-            id: appListView
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            clip: true
-            model: appListModel
-            delegate: Rectangle {
-              width: parent.width
-              height: 35
-              color: mouseArea.containsMouse ? "#4C566A" : "transparent"
-              radius: 4
+        Timer {
+          id: closeTimer
+          interval: 500
+          onTriggered: menuWindow.visible = false
+        }
 
-              Text {
-                anchors.fill: parent
-                anchors.leftMargin: 10
-                text: model.name
-                color: "white"
-                font.pixelSize: 12
-                verticalAlignment: Text.AlignVCenter
+        Rectangle {
+          anchors.fill: parent
+          color: "#2E3440"  // Using Nord theme color
+          border.color: "#4C566A"
+          border.width: 1
+          radius: 4
+
+          ColumnLayout {
+            anchors.fill: parent
+            anchors.margins: 10
+            spacing: 5
+
+            TextField {
+              id: searchField
+              Layout.fillWidth: true
+              placeholderText: "Search applications..."
+              color: "white"
+              focus: true
+              activeFocusOnTab: true
+              selectByMouse: true
+              hoverEnabled: true
+              background: Rectangle {
+                color: "#3B4252"
+                radius: 4
               }
-
-              MouseArea {
-                id: mouseArea
-                anchors.fill: parent
-                hoverEnabled: true
-                onClicked: {
-                  appLauncher.command = ["gtk-launch", model.name]
-                  appLauncher.running = true
+              onTextChanged: filterApps()
+              onPressed: function(event) {
+                forceActiveFocus()
+              }
+              Keys.onPressed: function(event) {
+                if (event.key === Qt.Key_Escape) {
                   menuWindow.visible = false
+                }
+              }
+            }
+
+            ListView {
+              id: appListView
+              Layout.fillWidth: true
+              Layout.fillHeight: true
+              clip: true
+              model: appListModel
+              delegate: Rectangle {
+                width: parent.width
+                height: 35
+                color: mouseArea.containsMouse ? "#4C566A" : "transparent"
+                radius: 4
+
+                Text {
+                  anchors.fill: parent
+                  anchors.leftMargin: 10
+                  text: model.name
+                  color: "white"
+                  font.pixelSize: 12
+                  verticalAlignment: Text.AlignVCenter
+                }
+
+                MouseArea {
+                  id: mouseArea
+                  anchors.fill: parent
+                  hoverEnabled: true
+                  onClicked: {
+                    console.log("Launching:", model.launchName, "from", model.path)
+                    appLauncher.command = ["gtk-launch", model.launchName]
+                    appLauncher.running = true
+                    menuWindow.visible = false
+                  }
                 }
               }
             }
