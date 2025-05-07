@@ -51,12 +51,6 @@ BarBlock {
     height: 400
     visible: false
 
-    onVisibleChanged: {
-      if (visible) {
-        searchField.forceActiveFocus()
-      }
-    }
-
     anchor {
       window: root.QsWindow?.window
       edges: Edges.Bottom
@@ -94,30 +88,6 @@ BarBlock {
             anchors.fill: parent
             anchors.margins: 10
             spacing: 5
-
-            TextField {
-              id: searchField
-              Layout.fillWidth: true
-              placeholderText: "Search applications..."
-              color: "white"
-              focus: true
-              activeFocusOnTab: true
-              selectByMouse: true
-              hoverEnabled: true
-              background: Rectangle {
-                color: "#3B4252"
-                radius: 4
-              }
-              onTextChanged: filterApps()
-              onPressed: function(event) {
-                forceActiveFocus()
-              }
-              Keys.onPressed: function(event) {
-                if (event.key === Qt.Key_Escape) {
-                  menuWindow.visible = false
-                }
-              }
-            }
 
             ListView {
               id: appListView
