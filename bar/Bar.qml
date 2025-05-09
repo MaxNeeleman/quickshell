@@ -37,8 +37,7 @@ Scope {
       Rectangle {
         id: highlight
         anchors.fill: parent
-        color: "#88111111"
- //       gradient: Theme.get.barGradient
+        color: Theme.get.barBgColor
       }
 
       height: 30
