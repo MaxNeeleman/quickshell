@@ -9,5 +9,5 @@ Try it today!
 Arch Linux
 
 ```
-yay -S qt6-5compat
+yay -S qt6-5compat quickshell
 ```

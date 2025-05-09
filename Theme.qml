@@ -104,6 +104,7 @@ Singleton {
       GradientStop { position: 0.4; color: "#2E3440" }  // Nord0 - Polar Night
       GradientStop { position: 0.8; color: "#2E3440" }  // Nord0 - Polar Night
       GradientStop { position: 1.0; color: "#3B4252" }  // Nord1 - Polar Night
+      
     }
     property Gradient buttonInactiveGradientV: Gradient {
       GradientStop { position: 0.0; color: "#434C5E" }  // Nord2 - Polar Night

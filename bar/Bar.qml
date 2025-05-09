@@ -32,12 +32,13 @@ Scope {
         barInstances.push(bar);
       }
 
-      color: Theme.get.barBgColor
+      color: "transparent"
 
       Rectangle {
         id: highlight
         anchors.fill: parent
-        gradient: Theme.get.barGradient
+        color: "#88111111"
+ //       gradient: Theme.get.barGradient
       }
 
       height: 30
