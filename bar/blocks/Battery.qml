@@ -20,34 +20,23 @@ BarBlock {
 
   Process {
     id: batteryProc
-    command: ["sh", "-c", "cat /sys/class/power_supply/BAT0/capacity"]
+    // Modify command to get both capacity and status in one call
+    command: ["sh", "-c", "echo $(cat /sys/class/power_supply/BAT0/capacity),$(cat /sys/class/power_supply/BAT0/status)"]
     running: hasBattery
 
     stdout: SplitParser {
       onRead: function(data) {
-        const capacity = parseInt(data.trim())
-        statusProc.running = true
+        const [capacityStr, status] = data.trim().split(',')
+        const capacity = parseInt(capacityStr)
         let batteryIcon = "󰂂"
         if (capacity <= 20) batteryIcon = "󰁺"
         else if (capacity <= 40) batteryIcon = "󰁽"
         else if (capacity <= 60) batteryIcon = "󰁿"
         else if (capacity <= 80) batteryIcon = "󰂁"
         else batteryIcon = "󰂂"
-        battery = `${batteryIcon} ${capacity}%`
-      }
-    }
-  }
-
-  Process {
-    id: statusProc
-    command: ["sh", "-c", "cat /sys/class/power_supply/BAT0/status"]
-    running: false
-
-    stdout: SplitParser {
-      onRead: function(data) {
-        const status = data.trim()
-        const symbol = status === "Charging" ? "🔌" : battery.split(" ")[0]
-        battery = `${symbol} ${battery.split(" ")[1]}`
+        
+        const symbol = status === "Charging" ? "🔌" : batteryIcon
+        battery = `${symbol} ${capacity}%`
       }
     }
   }
