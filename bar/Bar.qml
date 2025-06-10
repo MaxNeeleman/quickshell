@@ -63,7 +63,7 @@ Scope {
           Layout.alignment: Qt.AlignLeft
           Layout.fillWidth: true
 
-          Blocks.Icon {}
+          //Blocks.Icon {}
           Blocks.Workspaces {}
         }
 
