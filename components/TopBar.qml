@@ -43,57 +43,20 @@ Scope {
                 color: "#1a1a1a"
                 border.width: 0
 
-                // Left section - Workspaces/Activities with dashboard button
+                // Left section - Workspaces/Activities
                 Rectangle {
                     id: leftSection
                     anchors.left: parent.left
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    width: 140 // Increased width for dashboard button
+                    width: 120 // Reduced width since no dashboard button
                     color: "transparent"
 
                     Row {
                         anchors.centerIn: parent
                         spacing: 12
 
-                        // Dashboard toggle button
-                        Rectangle {
-                            width: 20
-                            height: 20
-                            radius: 4
-                            color: dashboard.isVisible ? "#a6e3a1" : "#313244"
-                            border.width: 1
-                            border.color: dashboard.isVisible ? "#a6e3a1" : "#45475a"
-                            anchors.verticalCenter: parent.verticalCenter
-
-                            Text {
-                                anchors.centerIn: parent
-                                text: "⊞"
-                                color: dashboard.isVisible ? "#1a1a1a" : "#cdd6f4"
-                                font.pixelSize: 10
-                                font.weight: Font.Bold
-                            }
-
-                            MouseArea {
-                                anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
-                                hoverEnabled: true
-                                
-                                onClicked: {
-                                    dashboard.toggle()
-                                }
-                                
-                                onEntered: {
-                                    parent.color = dashboard.isVisible ? "#a6e3a1" : "#45475a"
-                                }
-                                
-                                onExited: {
-                                    parent.color = dashboard.isVisible ? "#a6e3a1" : "#313244"
-                                }
-                            }
-                        }
-
-                        // Workspaces
+                        // Workspaces only
                         Repeater {
                             model: Hyprland.workspaces
 
@@ -107,26 +70,68 @@ Scope {
                                 border.width: 1
                                 border.color: modelData.focused ? "#a6e3a1" : "#45475a"
                                 anchors.verticalCenter: parent.verticalCenter
+                                
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                        Hyprland.dispatch("workspace", modelData.id.toString())
+                                    }
+                                }
                             }
                         }
                     }
                 }
 
-                // Center section - Window title
+                // Center section - Window title (clickable for dashboard)
                 Item {
                     anchors.centerIn: parent
-                    width: 200 // Fixed width or use implicitWidth
+                    width: 250 // Slightly wider for better visibility
+                    height: parent.height
                     id: waylandToplevel
     
-                    Text {
-                        anchors.centerIn: parent
-                        text: Hyprland.activeToplevel?.title ?? qsTr("Desktop")
-                        color: "#cdd6f4"
-                        font.family: "Inter, sans-serif"
-                        font.pixelSize: 13
-                        font.weight: Font.Medium
-                        width: parent.width
-                        horizontalAlignment: Text.AlignHCenter
+                    Rectangle {
+                        anchors.fill: parent
+                        color: "transparent"
+                        radius: 6
+                        // border.width: dashboard.isVisible ? 1 : 0
+                        // border.color: "#a6e3a1"
+                        
+                        // Hover effect
+                        Rectangle {
+                            anchors.fill: parent
+                            color: "#313244"
+                            radius: 6
+                            opacity: titleMouseArea.containsMouse ? 0.4 : 0
+                            
+                            Behavior on opacity {
+                                NumberAnimation { duration: 150 }
+                            }
+                        }
+                        
+                        // MouseArea first, so it's behind the text
+                        MouseArea {
+                            id: titleMouseArea
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                dashboard.toggle()
+                            }
+                        }
+                        
+                        Text {
+                            anchors.centerIn: parent
+                            text: Hyprland.activeToplevel?.title ?? qsTr("Click to open Dashboard")
+                            color: dashboard.isVisible ? "#a6e3a1" : "#cdd6f4"
+                            font.family: "Inter, sans-serif"
+                            font.pixelSize: 13
+                            font.weight: Font.Medium
+                            width: parent.width - 16
+                            horizontalAlignment: Text.AlignHCenter
+                            elide: Text.ElideRight
+                            
+                            z: 1
+                        }
                     }
                 }
 
@@ -258,7 +263,7 @@ Scope {
                         }
                     }
 
-                    // Clock widget (clickable to toggle dashboard)
+                    // Clock widget
                     Rectangle {
                         width: 80
                         height: parent.height
@@ -266,14 +271,6 @@ Scope {
                         
                         ClockWidget {
                             anchors.fill: parent
-                        }
-                        
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: {
-                                dashboard.toggle()
-                            }
                         }
                     }
                 }
