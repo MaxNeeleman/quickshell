@@ -47,8 +47,8 @@ BarBlock {
 
     PopupWindow {
         id: menuWindow
-        width: 200
-        height: 150
+        implicitWidth: 200
+        implicitHeight: 150
         visible: false
 
         anchor {
@@ -169,7 +169,7 @@ BarBlock {
 
     function toggleMenu() {
         if (root.QsWindow?.window?.contentItem) {
-            menuWindow.anchor.rect = root.QsWindow.window.contentItem.mapFromItem(root, 0, -menuWindow.height - 5, root.width, root.height)
+            menuWindow.anchor.rect = root.QsWindow.window.contentItem.mapFromItem(root, 0, -menuWindow.implicitHeight - 5, root.implicitWidth, root.implicitHeight)
             menuWindow.visible = !menuWindow.visible
         }
     }

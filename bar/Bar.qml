@@ -63,7 +63,7 @@ Scope {
           Layout.alignment: Qt.AlignLeft
           Layout.fillWidth: true
 
-          //Blocks.Icon {}
+          // Blocks.Icon {}
           Blocks.Workspaces {}
         }
 
@@ -97,14 +97,14 @@ Scope {
         // Right side
         RowLayout {
           id: rightBlocks
-          spacing: 0
+          spacing: 10
           Layout.alignment: Qt.AlignRight
           Layout.fillWidth: true
   
           Blocks.SystemTray {}
           Blocks.Memory {}
           Blocks.Sound {}
-          Blocks.Date {}
+          // Blocks.Date {}
           Blocks.Time {}
         }
       }
