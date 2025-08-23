@@ -104,7 +104,6 @@ Scope {
           Blocks.SystemTray {}
           Blocks.Memory {}
           Blocks.Sound {}
-          Blocks.Battery {}
           Blocks.Date {}
           Blocks.Time {}
         }

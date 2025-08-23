@@ -10,14 +10,7 @@ RowLayout {
   spacing: 5
 
   Repeater {
-    model: ScriptModel {
-      values: {[...SystemTray.items.values]
-        .filter((item) => {
-          return (item.id != "spotify-client"
-               && item.id != "chrome_status_icon_1")
-        })
-      }
-    }
+    model: SystemTray.items
 
     MouseArea {
       id: delegate

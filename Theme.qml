@@ -4,7 +4,7 @@ import QtQuick
 import Quickshell
 
 Singleton {
-  property Item get: nordic
+  property Item get: black
   
   Item {
     id: windowsXP
