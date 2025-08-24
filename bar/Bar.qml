@@ -16,17 +16,32 @@ Scope {
         barInstances[i].visible = !barInstances[i].visible;
       }
     }
+    
+    function toggleActionCenter(): void {
+      // Toggle action center on primary monitor
+      if (actionCenterWindow) {
+        actionCenterWindow.toggle();
+      }
+    }
   }
 
   property var barInstances: []
+  
+  // Action Center as a separate window
+  ActionCenter {
+    id: actionCenterWindow
+    implicitWidth: 500
+    panelHeight: 350
+  }
 
   Variants {
-    model: Quickshell.screens
+    model: Quickshell.screens.length > 0 ? [Quickshell.screens[1]] : []  // Only primary monitor
   
     PanelWindow {
       id: bar
       property var modelData
       screen: modelData
+      property var actionCenter: actionCenterWindow
 
       Component.onCompleted: {
         barInstances.push(bar);
@@ -51,29 +66,25 @@ Scope {
         right: true
       }
     
+      // Left Zone
       RowLayout {
-        id: allBlocks
-        spacing: 0
-        anchors.fill: parent
-  
-        // Left side
-        RowLayout {
-          id: leftBlocks
-          spacing: 10
-          Layout.alignment: Qt.AlignLeft
-          Layout.fillWidth: true
-
-          // Blocks.Icon {}
-          Blocks.Workspaces {}
+        id: leftZone
+        spacing: 20
+        anchors {
+          left: parent.left
+          verticalCenter: parent.verticalCenter
+          leftMargin: 10
         }
 
+        // Blocks.Icon {}
+        Blocks.Workspaces {}
+        
         Blocks.ActiveWorkspace {
           id: activeWorkspace
-          Layout.leftMargin: 10
-          anchors.centerIn: undefined
+          Layout.leftMargin: 150
 
           chopLength: {
-            var space = Math.floor(bar.width - (rightBlocks.implicitWidth + leftBlocks.implicitWidth))
+            var space = Math.floor(bar.width / 3)  // Use 1/3 of bar width for left content
             return space * 0.08;
           }
 
@@ -87,28 +98,53 @@ Scope {
               ? "#FFFFFF" : "#CCCCCC"
           }
         }
+      }
 
-        // Without this filler item, the active window block will be centered
-        // despite setting left alignment
-        Item {
-          Layout.fillWidth: true
-        }
-  
-        // Right side
-        RowLayout {
-          id: rightBlocks
-          spacing: 10
-          Layout.alignment: Qt.AlignRight
-          Layout.fillWidth: true
-  
-          Blocks.SystemTray {}
-          Blocks.Memory {}
-          Blocks.Sound {}
-          // Blocks.Date {}
-          Blocks.Time {}
+      // Center Zone - Invisible hover area for action center
+      Item {
+        id: centerZone
+        width: 200
+        height: parent.height
+        anchors.centerIn: parent
+        
+        // Invisible mouse area that triggers action center
+        MouseArea {
+          id: centerHoverArea
+          anchors.fill: parent
+          hoverEnabled: true
+          
+          onEntered: {
+            if (actionCenterWindow) {
+              actionCenterWindow.show()
+            }
+          }
+          
+          // Optional: Visual indicator when hovering (remove if you want it completely invisible)
+          // Rectangle {
+          //   anchors.fill: parent
+          //   color: parent.containsMouse ? "#20FFFFFF" : "transparent"  // Very subtle highlight
+          //   Behavior on color { ColorAnimation { duration: 150 } }
+          // }
         }
       }
+
+      // Right Zone
+      RowLayout {
+        id: rightZone
+        spacing: 10
+        anchors {
+          right: parent.right
+          verticalCenter: parent.verticalCenter
+          rightMargin: 10
+        }
+
+        Blocks.SystemTray {}
+        Blocks.Memory {}
+        Blocks.Sound {}
+        // Blocks.Date {}
+        Blocks.Time {}
+      }
+      
     }
   }
 }
-
